@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import sys, time, resource, copy
+import sys, time, resource
 from collections import OrderedDict, deque
 
 goalState = '012345678'
@@ -25,7 +25,6 @@ class Tree(object):
         return path_to_goal
 
     def get_len_path(self):
-        from pudb import set_trace
 
         def generator_parent(node):
             while True:
@@ -39,20 +38,6 @@ class Tree(object):
             node = next(gen_parent)
             depth += 1
         return depth
-
-class TreeAST(object):
-    def __init__(self):
-        self.data = None
-        self.parent = None
-        self.mov = None
-        self.depth = 0
-    def get_path_root(self):
-        path_to_goal = []
-        currentNode = self
-        while currentNode.parent:
-            path_to_goal.append(currentNode.mov)
-            currentNode = currentNode.parent
-        return path_to_goal
 
 def bfs(initialState, goalState = goalState):
     start_time = time.time()
@@ -262,7 +247,7 @@ def ast(initialState, goalState = goalState):
                             index_child = frontier.keys().index(child)
                             frontier_nodes[index_child] = node_child
 
-def create_text_file(path_to_goal, cost_of_path, nodes_expanded, search_depth,
+def create_text_file(path_to_goal, cost_of_path, nodes_expanded, search_depth, 
                      max_search_depth, running_time, max_ram_usage):
     output = open("output.txt", "w+")
     output.write("path_to_goal: %s\n" % (path_to_goal))
@@ -336,18 +321,6 @@ def getChildrenDfs(state, allMovements, indexChange):
     return movChildren
 
 def getPossibleMovements(state, allMovements):
-    '''
-    Function receives the current state and returns all movements that can be
-    done in lexical order.
-    Inputs:
-        state: list with current state of the board. As a list because
-        assignment probably does not support classes like numpy.
-        allMovements: dictionary with possible movements based on position.
-        They keys are tuples with (line, column). The values are list of
-        possible movements based on the keys.
-    Outputs:
-        possibleMov: list  of possible movements ('Up', 'Down', 'Left', 'Right')
-    '''
     indexZero = state.index('0')
     line = indexZero / 3
     column = indexZero % 3
